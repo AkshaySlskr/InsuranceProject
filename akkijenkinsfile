@@ -1,0 +1,36 @@
+pipeline {
+  agent any
+
+  tools {
+    maven 'M2_HOME'
+        }
+   
+  stages {
+    stage('CheckOut') {
+      steps {
+        echo 'Checkout the source code from GitHub'
+        git branch: 'main', url: 'https://github.com/AkshaySlskr/InsuranceProject.git'
+            }
+        }
+  stage('Package') {
+      steps {
+        echo 'Generate a jar file for the package using Maven'
+        sh 'mvn clean package'
+            }
+        }
+  stage('Publish test reports') {
+      steps {
+         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/INSURANCE_CICD_PROJECT/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            }
+        }
+  stage('Create image from the package') {
+      steps {
+         echo 'Create docker image from the package'
+         sh 'docker version'
+         sh "docker build -t akshayamit1992/insurance-app:${BUILD_NUMBER} ."
+         sh 'docker image list'
+         sh "docker tag akshayamit1992/insurance-app:${BUILD_NUMBER} akshayamit1992/insurance-app:latest"
+            }
+        }
+    }
+}
