@@ -35,10 +35,10 @@ pipeline {
      stage('Pushing it ot the DockerHub') {
             steps {
                  script {
-                        withCredentials([string(credentialsId: 'DOCKERPASSWD', variable: 'DOCKER-HUB-PASSWARD')]) {
-                        sh 'docker login -u akshayamit1992 -p ${DOCKER-HUB-PASSWARD}'    
+                        withCredentials([string(credentialsId: 'docker-akshayamit1992', variable: 'dockerhub-passward')]) {
+                        sh 'docker login -u akshayamit1992 -p ${dockerhub-passward}'    
                              }
-                        sh "docker push akshayamit1992/insurance-app:latest"
+                        sh 'docker push akshayamit1992/insurance-app:latest'
                         }
                   }
            }
