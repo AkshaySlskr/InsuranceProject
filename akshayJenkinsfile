@@ -32,11 +32,10 @@ pipeline {
   stage('Docker login') {
       steps {
          echo 'Login to docker hub to push the image'
-         withCredentials([usernamePassword(credentialsId: 'docker-login-cred-1', passwordVariable: 'docker-passwd-2', usernameVariable: 'docker-admin2')]) {
-         sh 'docker login -u ${docker-admin2} -p ${docker-passwd-2}'
+         echo "akshay1212" | docker login --username akshayamit1992 --password-stdin
                 }
             }
         }
-  }
 }
+
 
