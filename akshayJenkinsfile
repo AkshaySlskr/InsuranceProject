@@ -36,12 +36,13 @@ pipeline {
             steps {
                  script {
                         withCredentials([string(credentialsId: 'DOCKERPASSWD', variable: 'DOCKER-HUB-PASSWARD')]) {
-                        sh 'docker login -u akshayamit1992 -p ${DOCKER-HUB-PASSWARD}         
+                        sh 'docker login -u akshayamit1992 -p ${DOCKER-HUB-PASSWARD}'    
                              }
                         sh "docker push akshayamit1992/insurance-app:latest"
                         }
                   }
-       }
+           }
+     }
 }
 
 
