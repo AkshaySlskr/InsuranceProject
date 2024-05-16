@@ -23,6 +23,11 @@ pipeline {
          publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/INSURANCE_CICD_PROJECT/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
             }
         }
+  stage('Create image from the package') {
+      steps {
+         sh 'docker build -t akshayamit1992/insurance_image .'
+            }
+        }
     }
 }
 
