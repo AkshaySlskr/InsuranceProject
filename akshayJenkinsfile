@@ -19,7 +19,7 @@ pipeline {
             }
         }
   stage('Publish test reports') {
-      steps{
+      steps {
          publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/INSURANCE_CICD_PROJECT/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
             }
         }
@@ -29,5 +29,13 @@ pipeline {
          sh 'docker build -t akshayamit1992/insurance_image .'
             }
         }
-      }
+  stage('Docker login') {
+      steps {
+         echo 'login to docker hub to push the image'
+         withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'docker-pass', usernameVariable: 'docker-admin')]) {
+         sh 'docker login -u ${docker-admin} -p ${docker-pass}
+                        }
+
+            }
+        }
 }
