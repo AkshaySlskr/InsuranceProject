@@ -32,5 +32,14 @@ pipeline {
          sh "docker tag akshayamit1992/insurance-app:${BUILD_NUMBER} akshayamit1992/insurance-app:latest"
             }
         }
-    }
+  stage('Push Docker Image')
+      steps {
+         scripts {
+              withCredentials([string(credentialsId: 'dockerhib-login-id', variable: 'dockerhubpwd')]) {
+              sh 'docker login -u akshayamit1992 -p ${dockerhubpwd}'
+                     }
+              sh 'docker push akshayamit1992/insurance-app:latest'
+                 }
+            }
+      }
 }
