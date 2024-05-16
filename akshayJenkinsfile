@@ -25,6 +25,7 @@ pipeline {
         }
   stage('Create image from the package') {
       steps {
+         echo 'Create docker image from the package'
          sh 'docker build -t akshayamit1992/insurance_image .'
             }
         }
