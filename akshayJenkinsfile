@@ -26,7 +26,10 @@ pipeline {
   stage('Create image from the package') {
       steps {
          echo 'Create docker image from the package'
-         sh 'docker build -t akshayamit1992/insurance-app .'
+         sh 'docker version'
+         sh "docker build -t akshayamit1992/insurance-app:${BUILD_NUMBER} ."
+         sh 'docker image list'
+         sh "docker tag akshayamit1992/insurance-app:${BUILD_NUMBER} akshayamit1992/insurance-app:latest"
             }
         }
       }
