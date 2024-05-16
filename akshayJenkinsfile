@@ -37,7 +37,7 @@ pipeline {
                 }
             }
         }
-  stage('push the image') {
+  stage('Push the image') {
        steps {
           sh 'docker push akshayamit1992/insurance_image'
             }
