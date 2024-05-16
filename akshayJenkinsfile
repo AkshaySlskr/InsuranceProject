@@ -32,15 +32,9 @@ pipeline {
   stage('Docker login') {
       steps {
          echo 'Login to docker hub to push the image'
-         withCredentials([usernamePassword(credentialsId: 'docker-login-cred', passwordVariable: 'docker-pass1', usernameVariable: 'docker-admin1')]) {
-         sh 'docker login -u ${docker-admin1} -p ${docker-pass1}'
+         withCredentials([usernamePassword(credentialsId: 'docker-login-cred-1', passwordVariable: 'docker-passwd-2', usernameVariable: 'docker-admin2')]) {
+         sh 'docker login -u ${docker-admin2} -p ${docker-passwd-2}'
                 }
             }
         }
-  stage('Push the image') {
-      steps {
-         sh 'docker push akshayamit1992/insurance_image'
-            }
-        }
-    }
 }
