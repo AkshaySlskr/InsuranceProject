@@ -32,22 +32,16 @@ pipeline {
          sh "docker tag akshayamit1992/insurance-app:${BUILD_NUMBER} akshayamit1992/insurance-app:latest"
             }
         }
-   stage('Login to DockerHub') {
-       steps {
-        echo 'Login to DockerHub'
-        withCredentials([usernamePassword(credentialsId: 'DOCKER-HUB-AKSHAY', passwordVariable: 'DOCKERHUB-PSWD', usernameVariable: 'DOCKERHUB-USER')]) {
-        sh "docker login -u ${DOCKERHUB-USER} -p ${DOCKERHUB-PSWD}"
-               }
-           }
-       } 
-     stage('Pushing it ot the DockerHub'){
-       steps {
-        echo 'Pushing the docker image to DockerHub'
-        sh "docker push akshayamit1992/insurance-app:latest"
-           }
+     stage('Pushing it ot the DockerHub') {
+            steps {
+                 script {
+                        withCredentials([string(credentialsId: 'DOCKERPASSWD', variable: 'DOCKER-HUB-PASSWARD')]) {
+                        sh 'docker login -u akshayamit1992 -p ${DOCKER-HUB-PASSWARD}         
+                             }
+                        sh "docker push akshayamit1992/insurance-app:latest"
+                        }
+                  }
        }
-   }
 }
-
 
 
