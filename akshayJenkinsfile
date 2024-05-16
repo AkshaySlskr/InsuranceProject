@@ -29,17 +29,5 @@ pipeline {
          sh 'docker build -t akshayamit1992/insurance_image .'
             }
         }
-  stage('Docker Login') {
-       steps {
-          echo('login dockerhub to push image')withCredentials([usernamePassword(credentialsId: 'dockerloginuser', passwordVariable: '', usernameVariable: '')]) {          
-          sh 'docker login -u ${DockerLogin} -p ${DockerPasswd}'
-                }
-            }
-        }
-  stage('Push the image') {
-       steps {
-          sh 'docker push akshayamit1992/insurance_image'
-            }
-        }
-    }
+      }
 }
