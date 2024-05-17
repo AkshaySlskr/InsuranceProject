@@ -1,3 +1,3 @@
-providers "aws" {
+provider "aws" {
 region = "eu-north-1"
 }
