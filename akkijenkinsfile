@@ -43,7 +43,17 @@ pipeline {
  stage('Deploy Using Ansible') {
      steps {
               ansiblePlaybook credentialsId: 'ssh-user-key', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'ansible.yml', vaultTmpPath: ''
-           }
+           } 
       }
+ stage('Create Infrastructure using terraform') {
+    steps {
+          dir('akshay') {
+               sh 'sudo chmod 600 KEY-AWS.pem'
+               sh 'terraform init'
+               sh 'terraform validate'
+               sh 'terraform apply -auto approve'
+                        }
+          }
+       }
    }
 }
