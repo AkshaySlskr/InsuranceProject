@@ -1,1 +1,16 @@
+- name: Docker configure in test-server EC2 Machine
+  hosts: all
+  become : true
+  connection: ssh
+  tasks:
+  - name: Updating the test-server EC2 Machine
+    command: sudo apt update
 
+  - name: Install Docker
+    command: sudo apt install docker.io -y
+
+  - name: Start Docker service
+    command: sudo systemctl start docker
+    
+  - name: Deploy the Image and Run as Container
+    command: sudo docker run -d -p 8085:8081 akshayamit1992/insurance-app:latest
