@@ -1,0 +1,59 @@
+pipeline {
+  agent any
+   tools {
+     maven 'M2_HOME'
+         }
+  stages {
+    stage('CheckOut') {
+      steps {
+        echo 'Checkout the source code from GitHub'
+        git branch: 'main', url: 'https://github.com/AkshaySlskr/InsuranceProject.git'
+            }
+        }
+  stage('Package') {
+      steps {
+        echo 'Generate a jar file for the package using Maven'
+        sh 'mvn clean package'
+            }
+        }
+  stage('Publish test reports') {
+      steps {
+         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/INSURANCE_CICD_PROJECT/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            }
+        }
+  stage('Create image from the package') {
+      steps {
+         echo 'Create docker image from the package'
+         sh 'docker version'
+         sh "docker build -t akshayamit1992/insurance-app:${BUILD_NUMBER} ."
+         sh 'docker image list'
+         sh "docker tag akshayamit1992/insurance-app:${BUILD_NUMBER} akshayamit1992/insurance-app:latest"
+            }
+        }
+  stage('Push Docker Image') {
+      steps {
+              withCredentials([string(credentialsId: 'dockerhib-login-id', variable: 'dockerhubpwd')]) {
+              sh 'docker login -u akshayamit1992 -p ${dockerhubpwd}'
+                     }
+              sh 'docker push akshayamit1992/insurance-app:latest'
+            }
+         }
+ stage('Deploy Using Ansible') {
+     steps {
+              ansiblePlaybook credentialsId: 'ssh-user-key', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'ansible.yml', vaultTmpPath: ''
+           } 
+      }
+ stage('Create Infrastructure using terraform') {
+    steps {
+          dir('akshay') {
+               sh 'sudo chmod 600 KEY-AWS.pem'
+               withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'JENKINS-ADMIN', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+               sh 'terraform init'
+               sh 'terraform validate'
+               sh 'terraform apply -auto approve'
+                  }
+              }
+          }
+       }
+   }
+}
